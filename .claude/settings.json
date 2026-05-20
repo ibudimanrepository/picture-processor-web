@@ -19,7 +19,9 @@
       "Bash(npm run *)",
       "Bash(git branch *)",
       "Bash(gh help *)",
-      "Bash(gh api *)"
+      "Bash(gh api *)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_take_screenshot"
     ]
   }
 }
