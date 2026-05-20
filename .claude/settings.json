@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh repo *)",
+      "Bash(brew list *)",
+      "Bash(gh --version)",
+      "Bash(gh auth *)",
+      "Bash(ls -la /Users/ibudiman/Documents/picture-processor/)",
+      "Read(//Users/ibudiman/Documents/picture-processor/**)",
+      "Bash(rsync -a --exclude='.git' /Users/ibudiman/Documents/picture-processor/ /Users/ibudiman/Documents/PictProcessorWeb/)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "Bash(rm -rf .git .gitignore node_modules package-lock.json App.tsx app.json babel.config.js eas.json tsconfig.json src/ .claude/)",
+      "Bash(npm create *)",
+      "Bash(npm install *)",
+      "Bash(npm run *)"
+    ]
+  }
+}
