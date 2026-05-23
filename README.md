@@ -192,7 +192,6 @@ User → HomeScreen
 
 | Location | URL / Path |
 |---|---|
-| **Local (computer)** | `/Users/ibudiman/Documents/PictProcessorWeb/` |
 | **GitHub Repository** | https://github.com/ibudimanrepository/picture-processor-web |
 | **GitHub Pages (Live)** | https://ibudimanrepository.github.io/picture-processor-web/ |
 
