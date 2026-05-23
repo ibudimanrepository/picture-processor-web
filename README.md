@@ -1,97 +1,97 @@
 # SnapReport
 
-Aplikasi **QA Testing Report Generator** berbasis web. Upload screenshot, beri judul & deskripsi tiap step, lalu generate PDF laporan testing — semuanya di browser, tanpa backend.
+A web-based **QA Testing Report Generator**. Upload screenshots, add titles and descriptions for each step, then generate a PDF testing report — all in the browser, with no backend.
 
 **Live Site:** https://ibudimanrepository.github.io/picture-processor-web/
 
 ---
 
-## Daftar Isi
+## Table of Contents
 
-1. [Fungsional Sistem](#1-fungsional-sistem)
-2. [Teknikal Sistem](#2-teknikal-sistem)
-3. [Informasi Deployment](#3-informasi-deployment)
-4. [Panduan Pengembangan](#4-panduan-pengembangan)
+1. [Functional Overview](#1-functional-overview)
+2. [Technical Details](#2-technical-details)
+3. [Deployment Information](#3-deployment-information)
+4. [Development Guide](#4-development-guide)
 
 ---
 
-## 1. Fungsional Sistem
+## 1. Functional Overview
 
-### 1.1 Alur Pengguna
+### 1.1 User Flow
 
 ```
-Upload Screenshot → Edit Step → Generate PDF → Download / Share
+Upload Screenshots → Edit Steps → Generate PDF → Download / Share
 ```
 
-### 1.2 Fitur Detail
+### 1.2 Features
 
-| Fitur | Deskripsi |
+| Feature | Description |
 |---|---|
-| **Upload Screenshot** | Pilih 1 atau banyak file gambar dari device. Setiap file dikompres (max 600px width, JPEG quality 0.7) sebelum ditampilkan. |
-| **Reorder Screenshot** | Atur ulang urutan screenshot dengan tombol ▲ (naik) dan ▼ (turun). |
-| **Edit Step** | Klik screenshot untuk membuka modal editor. Isi `step title` (judul langkah) dan `description` (deskripsi yang harus diverifikasi tester). |
-| **Generate PDF** | Tombol "Process N Steps" memproses semua screenshot menjadi PDF landscape dengan layout 4 kolom per halaman. |
-| **Download PDF** | PDF langsung di-download ke perangkat. |
-| **Share PDF** | Menggunakan Web Share API untuk berbagi file PDF via aplikasi lain (WhatsApp, Email, dll). Fallback ke download jika Web Share API tidak tersedia. |
-| **New Report** | Reset semua data dan kembali ke halaman awal untuk membuat laporan baru. |
+| **Upload Screenshots** | Select one or more image files from your device. Each file is compressed (max 600px width, JPEG quality 0.7) before display. |
+| **Reorder Screenshots** | Change screenshot order with ▲ (move up) and ▼ (move down) buttons. |
+| **Edit Steps** | Click a screenshot to open the editor modal. Fill in the step title and description (what the tester should verify). |
+| **Generate PDF** | The "Process N Steps" button compiles all screenshots into a landscape PDF with a 4-column layout per page. |
+| **Download PDF** | Download the PDF file directly to your device. |
+| **Share PDF** | Uses the Web Share API to share the PDF via other apps (WhatsApp, Email, etc.). Falls back to download if Web Share API is unavailable. |
+| **New Report** | Clears all data and returns to the home screen to start a new report. |
 
-### 1.3 Tampilan (Screens)
+### 1.3 Screen Breakdown
 
-**HomeScreen** — Halaman utama:
-- Header: logo "SnapReport" + jumlah screenshot
-- Empty state: ikon kamera + tombol upload (saat belum ada screenshot)
-- Daftar screenshot: thumbnail, nomor step, judul, tombol urut/hapus
-- Bottom bar: tombol Upload (secondary) + Process Steps (primary)
-- Loading overlay: spinner saat PDF sedang digenerate
+**HomeScreen** — Main page:
+- Header: "SnapReport" title + screenshot count
+- Empty state: camera emoji + upload button (when no screenshots are added)
+- Screenshot list: thumbnail, step number, title, reorder/delete buttons
+- Bottom bar: Upload button (secondary) + Process Steps button (primary)
+- Loading overlay: spinner during PDF generation
 
-**PreviewScreen** — Halaman hasil:
-- Ikon centang hijau + "Report Ready"
-- Tombol Share, Download, New Report
-- Tombol Back (kembali tanpa reset)
+**PreviewScreen** — Result page:
+- Green checkmark + "Report Ready" heading
+- Share, Download, and New Report buttons
+- Back button (returns without resetting)
 
-**StepEditor** — Modal edit:
-- Input judul step
-- Textarea deskripsi
-- Tombol Delete Step
+**StepEditor** — Edit modal:
+- Step title input
+- Description textarea
+- Delete Step button
 
-### 1.4 Privasi
+### 1.4 Privacy
 
-Aplikasi ini **100% client-side**. Tidak ada data yang dikirim ke server:
-- Foto hanya dibaca di memori browser lewat File API & Canvas API
-- Kompresi gambar via Canvas API (off-screen)
-- PDF di-generate via jsPDF di browser
-- Hasil download/share langsung dari browser, tidak via server
-- Semua data hilang saat halaman di-refresh
+This application is **100% client-side**. No data is sent to any server:
+- Images are read in browser memory via the File API & Canvas API
+- Image compression is done via the Canvas API (off-screen)
+- PDF is generated client-side via jsPDF
+- Download/share happens directly from the browser
+- All data is lost when the page is refreshed
 
 ---
 
-## 2. Teknikal Sistem
+## 2. Technical Details
 
 ### 2.1 Tech Stack
 
-| Teknologi | Versi | Fungsi |
+| Technology | Version | Purpose |
 |---|---|---|
 | **React** | 19.x | UI library |
 | **TypeScript** | 6.x | Type safety |
 | **Vite** | 8.x | Build tool & dev server |
 | **jsPDF** | 4.x | PDF generation |
-| **html2canvas** | 1.x | *(terinstall, belum dipakai langsung)* |
+| **html2canvas** | 1.x | *(installed but not directly imported)* |
 
-### 2.2 Struktur File
+### 2.2 File Structure
 
 ```
 /
-├── index.html                    # Entry HTML
-├── vite.config.ts                # Konfigurasi Vite (base, plugin, outDir)
+├── index.html                    # HTML entry point
+├── vite.config.ts                # Vite configuration (base, plugin, outDir)
 ├── package.json                  # Scripts & dependencies
-├── tsconfig.json                 # Root TS config
-├── tsconfig.app.json             # TS config untuk src/
-├── tsconfig.node.json            # TS config untuk vite.config.ts
+├── tsconfig.json                 # Root TypeScript config
+├── tsconfig.app.json             # TS config for src/
+├── tsconfig.node.json            # TS config for vite.config.ts
 ├── .gitignore                    # Git ignore rules
-├── eslint.config.js              # ESLint config
+├── eslint.config.js              # ESLint configuration
 │
 ├── src/
-│   ├── main.tsx                  # Entry point React (createRoot)
+│   ├── main.tsx                  # React entry point (createRoot)
 │   ├── App.tsx                   # Root component + screen navigation
 │   ├── index.css                 # Global stylesheet (~400 lines)
 │   │
@@ -105,11 +105,11 @@ Aplikasi ini **100% client-side**. Tidak ada data yang dikirim ke server:
 │   │   └── imageUtils.ts         # Image compression utility
 │   │
 │   ├── services/
-│   │   └── pdfGenerator.ts       # PDF generation service
+│   │   └── pdfGenerator.ts       # PDF generation service (jsPDF)
 │   │
 │   ├── components/
 │   │   ├── ActionButton.tsx      # Reusable button (primary/secondary/danger)
-│   │   ├── EmptyState.tsx        # Empty state placeholder
+│   │   ├── EmptyState.tsx        # Empty state placeholder UI
 │   │   ├── ScreenshotItem.tsx    # Screenshot card component
 │   │   └── StepEditor.tsx        # Modal editor for step metadata
 │   │
@@ -117,7 +117,7 @@ Aplikasi ini **100% client-side**. Tidak ada data yang dikirim ke server:
 │       ├── HomeScreen.tsx        # Main upload & process screen
 │       └── PreviewScreen.tsx     # Result screen (share/download)
 │
-└── docs/                         # Build output (auto-generated, di-deploy ke GitHub Pages)
+└── docs/                         # Build output (auto-generated, deployed to GitHub Pages)
     ├── index.html
     ├── favicon.svg
     ├── icons.svg
@@ -129,27 +129,27 @@ Aplikasi ini **100% client-side**. Tidak ada data yang dikirim ke server:
         └── purify.es-*.js        # DOM Purify (jsPDF dependency)
 ```
 
-### 2.3 Arsitektur & Data Flow
+### 2.3 Architecture & Data Flow
 
 ```
 User → HomeScreen
-         ├── Pilih file → compressImage() → useScreenshots.addScreenshots()
+         ├── Pick files → compressImage() → useScreenshots.addScreenshots()
          ├── Edit step → StepEditor → useScreenshots.updateScreenshot()
-         ├── Urutkan → useScreenshots.moveUp() / moveDown()
+         ├── Reorder → useScreenshots.moveUp() / moveDown()
          └── Process → generatePDF() → PreviewScreen
                                           ├── Share → Web Share API
                                           └── Download → <a> download
 ```
 
-**State Management:** Semua state dikelola dalam satu custom hook `useScreenshots()` di `App.tsx`, lalu di-pass sebagai props ke screen dan component. Tidak ada global state library (Redux, Zustand, dll).
+**State Management:** All state is managed in a single custom hook `useScreenshots()` in `App.tsx`, passed as props to screens and components. No global state library (Redux, Zustand, etc.) is used.
 
-**Navigasi:** Tidak ada routing library. `useState<'home' | 'preview'>` di `App.tsx` digunakan untuk toggle screen.
+**Navigation:** No routing library. A simple `useState<'home' | 'preview'>` in `App.tsx` toggles between screens.
 
 **PDF Layout:**
 - Orientation: landscape (letter, 792pt x 612pt)
-- 4 kolom per halaman (masing-masing card berisi step number, title, description, dan gambar)
-- Gambar mempertahankan aspect ratio asli, di-scale agar muat dalam card
-- Setiap halaman punya header "QA Testing Report" + tanggal
+- 4 columns per page (each card contains step number, title, description, and image)
+- Images maintain their original aspect ratio, scaled to fit inside the card
+- Each page has a "QA Testing Report" header with the generation date
 
 ### 2.4 Dependencies
 
@@ -177,82 +177,82 @@ User → HomeScreen
 
 ### 2.5 Scripts
 
-| Script | Command | Fungsi |
+| Script | Command | Description |
 |---|---|---|
-| `dev` | `vite` | Jalankan dev server (HMR) |
-| `build` | `tsc -b && vite build` | Build produksi ke folder `docs/` |
-| `preview` | `vite preview` | Preview hasil build lokal |
-| `lint` | `eslint .` | Linting |
+| `dev` | `vite` | Start dev server with HMR |
+| `build` | `tsc -b && vite build` | Production build to `docs/` |
+| `preview` | `vite preview` | Preview the production build locally |
+| `lint` | `eslint .` | Run ESLint |
 
 ---
 
-## 3. Informasi Deployment
+## 3. Deployment Information
 
-### 3.1 Lokasi Kode
+### 3.1 Code Locations
 
-| Lokasi | URL / Path |
+| Location | URL / Path |
 |---|---|
-| **Lokal (komputer)** | `/Users/ibudiman/Documents/PictProcessorWeb/` |
+| **Local (computer)** | `/Users/ibudiman/Documents/PictProcessorWeb/` |
 | **GitHub Repository** | https://github.com/ibudimanrepository/picture-processor-web |
 | **GitHub Pages (Live)** | https://ibudimanrepository.github.io/picture-processor-web/ |
 
-### 3.2 Detail Repository
+### 3.2 Repository Details
 
-| Atribut | Nilai |
+| Attribute | Value |
 |---|---|
 | Repo name | `ibudimanrepository/picture-processor-web` |
 | Visibility | Public |
 | Default branch | `main` |
 | Language | TypeScript |
-| Created | 19 Mei 2026 |
+| Created | May 19, 2026 |
 
-### 3.3 GitHub Pages Setup
+### 3.3 GitHub Pages Configuration
 
 - **Source:** Branch `main`, folder `/docs`
 - **Build type:** Legacy (static files)
-- **Custom domain:** Tidak ada
+- **Custom domain:** None
 - **HTTPS:** Enabled (forced)
 
-Cek status deployment:
+Check deployment status:
 ```bash
 gh api /repos/ibudimanrepository/picture-processor-web/pages/builds/latest
 ```
 
-### 3.4 Proses Deployment
+### 3.4 Deployment Process
 
-Build otomatis di-handle oleh Vite, output ke folder `docs/`, lalu di-commit dan push ke GitHub. GitHub Pages secara otomatis serve file dari folder `docs/` di branch `main`.
+Builds are handled by Vite, output to the `docs/` folder, then committed and pushed to GitHub. GitHub Pages automatically serves files from the `docs/` folder on the `main` branch.
 
-**Langkah deployment manual:**
+**Manual deployment steps:**
 
 ```bash
 # 1. Build
 npm run build
 
-# 2. Commit build output
+# 2. Commit the build output
 git add docs/
 git commit -m "Update build"
 
-# 3. Push ke GitHub (Pages auto-deploy)
+# 3. Push to GitHub (Pages auto-deploys)
 git push
 ```
 
-**Vite config penting:**
+**Important Vite config:**
 ```ts
 export default defineConfig({
-  base: '/picture-processor-web/',  // base URL sesuai repo name
+  base: '/picture-processor-web/',  // base URL must match the repo name
   build: {
-    outDir: 'docs',                  // output folder untuk GitHub Pages
+    outDir: 'docs',                  // output folder for GitHub Pages
   },
 })
 ```
 
-Perubahan pada `base` di `vite.config.ts` perlu diubah jika repo di-rename atau dipindahkan.
+The `base` value in `vite.config.ts` must be updated if the repo is renamed or moved.
 
 ---
 
-## 4. Panduan Pengembangan
+## 4. Development Guide
 
-### 4.1 Persiapan Lokal
+### 4.1 Local Setup
 
 ```bash
 git clone https://github.com/ibudimanrepository/picture-processor-web.git
@@ -261,30 +261,30 @@ npm install
 npm run dev
 ```
 
-Dev server akan berjalan di `http://localhost:5173`.
+The dev server runs at `http://localhost:5173`.
 
 ### 4.2 Build & Preview
 
 ```bash
-npm run build     # build ke folder docs/
-npm run preview   # preview hasil build lokal
+npm run build     # build to docs/
+npm run preview   # preview the build locally
 ```
 
 ### 4.3 Commit Convention
 
-Commit message menggunakan format deskriptif Bahasa Inggris, misalnya:
+Use descriptive English commit messages, for example:
 - `"Add feature: ..."`
 - `"Fix bug: ..."`
 - `"Update style: ..."`
 - `"PDF: horizontal layout with preserved aspect ratio"`
 
-### 4.4 Catatan Penting
+### 4.4 Important Notes
 
-1. **html2canvas** terdaftar di package.json tapi tidak diimport di kode saat ini. Jika ada fitur baru yang membutuhkan DOM-to-image capture, library ini bisa dipakai langsung tanpa install ulang.
-2. **Tidak ada test suite** — pengujian dilakukan manual di browser.
-3. **Tidak ada backend** — semua proses client-side. If in the future there's a need to add a backend, the architecture is simple enough that the state hook (`useScreenshots`) can be extended to sync with an API.
-4. **Chunk size warning** pada build (jsPDF bundle ~600KB) tidak mempengaruhi fungsionalitas. Untuk produksi, bisa di-split dengan dynamic import jika diperlukan.
+1. **html2canvas** is listed in `package.json` but is not currently imported anywhere. If a future feature requires DOM-to-image capture, the library is ready to use without a reinstall.
+2. **No test suite** — manual testing is done via the browser.
+3. **No backend** — everything runs client-side. If a backend is needed in the future, the architecture (with the `useScreenshots` hook) can be extended to sync with an API.
+4. **Chunk size warning** during builds (jsPDF bundle ~600KB) does not affect functionality. For production, the bundle can be split using dynamic imports if needed.
 
 ---
 
-*Dokumentasi ini diperbarui pada 20 Mei 2026.*
+*Documentation updated on May 20, 2026.*
