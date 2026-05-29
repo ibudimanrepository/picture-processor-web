@@ -56,7 +56,7 @@ Upload Screenshots → Edit Steps → Generate PDF → Download / Share
 
 ### 1.4 Privacy
 
-This application is **100% client-side**. No data is sent to any server:
+No data is sent to any server:
 - Images are read in browser memory via the File API & Canvas API
 - Image compression is done via the Canvas API (off-screen)
 - PDF is generated client-side via jsPDF
